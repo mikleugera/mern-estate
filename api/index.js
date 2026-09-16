@@ -1,6 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import process from 'node:process';
+import UserRouter  from '../routes/user.route.js';
+import AuthRouter  from '../routes/auth.route.js';
+
 process.loadEnvFile();
 
 mongoose.connect(process.env.MONGODB_URI).then(() => {
@@ -13,6 +16,11 @@ mongoose.connect(process.env.MONGODB_URI).then(() => {
 
 const app = express();
 
+app.use(express.json());
+
 app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
+
+app.use('/', UserRouter)
+app.use('/', AuthRouter)
