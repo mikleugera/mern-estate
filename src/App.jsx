@@ -4,10 +4,12 @@ import { About } from './pages/About'
 import { Profile } from './pages/Profile'
 import { SingUp } from './pages/SingUp'
 import { SingIn } from './pages/SingIn'
+import { Header } from './components/Header'
 
 export const App = () => {
   return (
     <BrowserRouter>
+      <Header/>
       <Routes>  
         <Route path='/' element={<Home/>} />
         <Route path='/sing-in' element={<SingIn/>} />
