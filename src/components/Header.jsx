@@ -22,8 +22,8 @@ export const Header = () => {
                 <Link to='/about'>
                     <li className='hidden sm:inline text-slate-700 hover:underline cursor-pointer'>About</li>
                 </Link>
-                <Link to='/sing-in'>
-                    <li className='text-slate-700 hover:underline cursor-pointer'>Sing in</li>
+                <Link to='/sign-in'>
+                    <li className='text-slate-700 hover:underline cursor-pointer'>Sign in</li>
                 </Link>
             </ul>
         </div>
