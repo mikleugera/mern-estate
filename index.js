@@ -1,8 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import process from 'node:process';
-import UserRouter  from '../routes/user.route.js';
-import AuthRouter  from '../routes/auth.route.js';
+import UserRouter  from './routes/user.route.js';
+import AuthRouter  from './routes/auth.route.js';
 
 process.loadEnvFile();
 
@@ -22,8 +22,8 @@ app.listen(3000, () => {
     console.log('Server is running on port 3000');
 });
 
-app.use('/', UserRouter)
-app.use('/', AuthRouter)
+app.use('/api', UserRouter)
+app.use('/api/auth', AuthRouter)
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
