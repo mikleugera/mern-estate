@@ -40,9 +40,6 @@ export const SignUp = () => {
       setLoading(false);
       setError(error.message);
     }
-
-    
-
   }
 
   return (
