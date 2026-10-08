@@ -1,9 +1,10 @@
+import cookieParser from 'cookie-parser';
 import express from 'express';
 import mongoose from 'mongoose';
 import process from 'node:process';
-import UserRouter  from './routes/user.route.js';
-import AuthRouter  from './routes/auth.route.js';
-import cookieParser from 'cookie-parser';
+import AuthRouter from './routes/auth.route.js';
+import ListingRouter from './routes/listing.route.js';
+import UserRouter from './routes/user.route.js';
 
 process.loadEnvFile();
 
@@ -25,6 +26,7 @@ app.listen(3000, () => {
 
 app.use('/api/user', UserRouter)
 app.use('/api/auth', AuthRouter)
+app.use('/api/listing', ListingRouter)
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
