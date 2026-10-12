@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from 'react-redux'
 import { deleteUserFailure, deleteUserStart, deleteUserSuccess, 
           signOutUserFailure, signOutUserStart, signOutUserSuccess, 
           updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice.js'
+import {Link} from 'react-router-dom'
 
 export const Profile = () => {
   const fileRef = useRef(null)
@@ -37,7 +38,11 @@ export const Profile = () => {
 
       dispatch(updateUserSuccess(data))
       setUpdateSuccess(true)
-      //navigate('/')
+      
+      setTimeout(() => {
+        setUpdateSuccess(false)
+      }, 2000)
+      
     } catch (error) {
       dispatch(updateUserFailure(error.message))
     }
@@ -96,6 +101,10 @@ export const Profile = () => {
                 defaultValue={currentUser.password} onChange={handleChange}/>
         <button className="bg-slate-700 text-white p-3 rounded-lg uppercase 
                 hover:opacity-95 disabled:opacity-80 cursor-pointer" disabled={loading}>{loading ? 'Loading...' : 'Update'}</button>
+        <Link to={'/create-listing'} className="bg-green-700 text-white p-3 rounded-lg uppercase 
+                hover:opacity-95 cursor-pointer">
+          create listing        
+        </Link>
       </form>
       <div className='flex justify-between mt-5'>
         <span className='text-red-700 cursor-pointer' onClick={handleDeleteUser}>Delete Account</span>
