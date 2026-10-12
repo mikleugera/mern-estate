@@ -2,24 +2,23 @@ import { User } from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import bcrypt from "bcryptjs";
 
+
 export const updateUser = async (req, res, next) => {
     if (req.user.id !== req.params.id) return next(errorHandler(401, 'You can only update your own account!'));
 
     const {password} = req.body;
 
     try {
-        if (password) {
-            password = bcrypt.hashSync(password, 10);
-        }
+        const newPassword = password ? bcrypt.hashSync(password, 10) : undefined;
 
         const updateUser = await User.findByIdAndUpdate(req.params.id, {
             $set: {
                 username: req.body.username,
                 email: req.body.email,
-                password: req.body.password,
+                password: newPassword,
                 avatar: req.body.avatar
             }
-        }, {new: true})
+        }, {returnDocument: "after"})
 
         const {password: pass, ...rest} = updateUser._doc;
 
