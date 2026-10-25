@@ -1,17 +1,43 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import { deleteUserFailure, deleteUserStart, deleteUserSuccess, 
           signOutUserFailure, signOutUserStart, signOutUserSuccess, 
           updateUserFailure, updateUserStart, updateUserSuccess } from '../redux/user/userSlice.js'
 import {Link} from 'react-router-dom'
+import { supabase } from '../supabase.jsx'
+
 
 export const Profile = () => {
   const fileRef = useRef(null)
   const {currentUser, loading, error} = useSelector(state => state.user.user)
   const [formData, setFormData] = useState({})
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [file, setFile] = useState(null)
 
+  console.log(formData);
   const dispatch = useDispatch();
+
+  const handleFileUpload = async (file) => {
+    if (!file) return alert('Будь ласка, виберіть файл!')
+
+    try {
+      const fileName = new Date().getTime() + file.name
+
+      const { error } = await supabase.storage
+        .from('images') 
+        .upload(fileName, file, {upsert: false})
+
+      if (error) throw error
+
+      const { data: publicUrlData } = supabase.storage
+        .from('images')
+        .getPublicUrl(fileName)
+
+      setFormData({...formData, avatar: publicUrlData.publicUrl})
+    } catch (error) {
+      dispatch(updateUserFailure(error.message))
+    }
+  }
 
   const handleChange = (e) => {
     setFormData({...formData, [e.target.id]: e.target.value});
@@ -85,14 +111,20 @@ export const Profile = () => {
     }
   }
 
+  useEffect(() => {
+    if(file) {
+      handleFileUpload(file)
+    }
+  }, [file])
+
   return (
     <div className='p-3 w-lg mx-auto'>
       <h1 className="text-4xl font-semibold text-center my-7">
         Profile
       </h1>
       <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
-        <input id='avatar' onChange={handleChange} type="file" ref={fileRef} hidden accept='image/*'/>
-        <img className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2' onClick={() => fileRef.current.click()} src={currentUser.avatar} alt="avatar"/>
+        <input id='avatar' onChange={(e) => setFile(e.target.files[0])} type="file" ref={fileRef} hidden accept='image/*'/>
+        <img className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2' onClick={() => fileRef.current.click()} src={formData.avatar || currentUser.avatar} alt="avatar"/>
         <input type="text" id='username' placeholder='username' className='border p-3 rounded-lg bg-white' 
                 defaultValue={currentUser.username} onChange={handleChange}/>
         <input type="email" id='email' placeholder='email' className='border p-3 rounded-lg bg-white' 
