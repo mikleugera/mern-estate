@@ -37,23 +37,27 @@ export const CreateListing = () => {
     }
   }
 
-  const storeImage = async (file) => {
+  const storeImage = (file) => {
     return new Promise((resolve, reject) => {
       if (!file) return alert('Будь ласка, виберіть файл!')
 
-        const fileName = new Date().getTime() + file.name
+      const fileName = new Date().getTime() + '_' + file.name
 
-        const { error } = supabase.storage
-          .from('images') 
-          .upload(fileName, file)
+      supabase.storage
+        .from('images') 
+        .upload(fileName, file)
+        .then(({error}) => {
+          if (error) return reject(error)
 
-        if (error) throw reject(error)
+          const { data: publicUrlData } = supabase.storage
+            .from('images')
+            .getPublicUrl(fileName)
 
-        const { data: publicUrlData } = supabase.storage
-          .from('images')
-          .getPublicUrl(fileName)
-
-        resolve(publicUrlData.publicUrl)
+          resolve(publicUrlData.publicUrl)
+        })
+        .catch((err) => {
+          reject(err)
+        })
     })
   }
 
