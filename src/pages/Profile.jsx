@@ -102,6 +102,25 @@ export const Profile = () => {
       setUserListings(data)
     } catch (error) {
       setShowListingsError(true)
+      console.log(error);
+    }
+  }
+
+  const handleDeleteListing = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE'
+      })
+      const data = await res.json()
+
+      if(data.success === false) {
+        console.error(data.message)
+        return
+      }
+
+      setUserListings(prevListings => prevListings.filter(listing => listing._id !== listingId))
+    } catch (error) {
+      console.error('Error deleting listing:', error)
     }
   }
 
