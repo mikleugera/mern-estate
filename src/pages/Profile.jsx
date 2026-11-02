@@ -203,10 +203,11 @@ export const Profile = () => {
                         onClick={() => handleDeleteListing(listing._id)}>
                         Delete
                 </button>
-                <button className="text-green-700 hover:opacity-95 uppercase cursor-pointer"  
-                        onClick={() => handleEditListing(listing._id)}>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <button className="text-green-700 hover:opacity-95 uppercase cursor-pointer">
                         Edit
-                </button>
+                  </button>
+                </Link>
               </div>
             </div>
           ))}

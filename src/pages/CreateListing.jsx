@@ -123,7 +123,7 @@ export const CreateListing = () => {
       })
       const data = await res.json()
       setLoading(false)
-      console.log(data);
+
       if(!data.success) {
         setError(data.message)
       }
