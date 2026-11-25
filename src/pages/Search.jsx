@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
+import { ListingItem } from "../components/ListingItem";
 
 export const Search = () => {
   const navigate = useNavigate();  
@@ -17,6 +18,7 @@ export const Search = () => {
   const [loading, setLoading] = useState(false)
   const [listings, setListings] = useState([])
   
+  console.log(listings);
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const searchTermFromURL = params.get('searchTerm');  
@@ -149,8 +151,15 @@ export const Search = () => {
                 <button className="bg-slate-700 text-white p-3 rounded-lg uppercase cursor-pointer hover:opacity-95">Search</button>
             </form>
         </div>
-        <div className="">
-            <span className="text-3xl font-semibold border-b p-3 text-slate-700 leading-22">Listing results:</span>
+        <div className="flex-1">
+            <h6 className="text-3xl font-semibold border-b p-3 text-slate-700 text-left">Listing results:</h6>
+            <div className="p-7 flex gap-4">
+                {!listings.length && !loading && <p className="text-xl text-slate-700 text-center w-full">No listings found!</p>}
+                {loading && <p className="text-xl text-slate-700 text-center w-full">Loading...</p>}
+                {!loading && listings && listings.map((listing) => (
+                    <ListingItem key={listing._id} listing={listing} />
+                ))}
+            </div>
         </div>
         
     </div>
